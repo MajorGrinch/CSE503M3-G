@@ -1,4 +1,5 @@
 <?php
+session_start();
 if (isset($_POST['username']) && isset($_POST['password'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
@@ -14,7 +15,9 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     $stmt->fetch();
     if ($temp_password === $password) {
         $_SESSION['user'] = $username;
-        header("Location: index.php");
+    } else {
+        die("password incorrect");
     }
     $stmt->close();
+    header("Location: index.php");
 }

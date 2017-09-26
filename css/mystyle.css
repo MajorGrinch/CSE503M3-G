@@ -1,0 +1,66 @@
+.wrap h2{
+    margin-top: 0px;
+    margin-bottom: 10px;
+    font-size:2em;
+}
+.wrap h4{
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+.wrap p{
+    margin-top: 2px;
+    font-size: 1.5em;
+}
+.wrap a{
+    text-decoration: none;
+}
+.wrap a:hover{
+    text-decoration: underline;
+    text-decoration-color:blue; 
+}
+#news_list{
+    width: 70%;
+    margin-left: 10%;
+    float: left;
+}
+#welcome{
+    text-align: center;
+}
+#sidebar{
+    width: 20%;
+    float: right;
+    text-align: center;
+    margin-top: 3%;
+}
+.sidebarinput{
+    width: 60%;
+}
+
+.submit{
+    background-color: lightgreen;
+    width: 50%;
+}
+#account_mgr{
+    width: 70%;
+    text-align: left;
+    margin-left: 10%;
+    font-size: 1.5em;
+}
+#account_mgr button{
+    width: 80%;
+    font-size: 0.75em;
+}
+
+#mgr_item{
+    margin-top: 10px;
+}
+
+html{
+    font-family: 'Times New Roman', Times, serif;
+}
+.logout{
+    font-size: 45px;
+}
+#mgr_list{
+    margin-bottom: 10px;
+}
