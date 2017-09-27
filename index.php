@@ -7,7 +7,7 @@ session_start();
     <meta charset="UTF-8">
     <title>Kevin Miao Forum</title>
     <link rel="stylesheet" type="text/css" href="css/mystyle.css"/>
-    <script type="text/javascript" src="js/jquery-3.2.1.js"></script>
+    <!-- <script type="text/javascript" src="js/jquery-3.2.1.js"></script> -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
@@ -37,17 +37,12 @@ session_start();
                     </div>
                     <button type="submit" class="btn btn-primary">Sign in</button>
                 </form>
-                <button type="button" class="btn btn-secondary" onclick="signup()">Sign up</button>
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target=".bs-example-modal-sm">Sign up</button>
             <?php else : ?>
-                <div id="account_mgr">
-                    <ul id="mgr_list">
-                        <li><?php echo $_SESSION['user']; ?></li>
-                        <li><button id="mgr_item">My Stories</button></li>
-                        <li><button id="mgr_item">Write A Story</button></li>
-                    </ul>
-                    <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="get" align="center">
-                        <input type="submit" name="logout" value="logout" class="btn btn-primary"/>
-                    </form>
+                <div id="account_mgr" class="btn-group-vertical">
+                    <button type="button" class="btn btn-secondary btn-lg">Write A Story</button>
+                    <button type="button" class="btn btn-secondary btn-lg">My Stories</button>
+                    <button type="button" class="btn btn-secondary btn-lg" id="logout">Logout</button>
                 </div>
             <?php endif; ?>
             <?php
@@ -83,20 +78,41 @@ session_start();
 
         </div>
     </div>
-    <div id="signup_page" display>
-        <input type="text" name="username"/>
-        <input type="password" name="password"/>
-        <input type="submit" value="Sign up">
+    <div class="modal fade bs-example-modal-sm" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Registration</h4>
+                </div>
+                <div class="modal-body">
+                    <form name="reg-form" id="signup_form" action="register.php" method="post">
+                        <div class="form-group">
+                            <label for="username" class="control-label">Username:</label>
+                            <input type="text" class="form-control" id="username" name="username"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="control-label">Password</label>
+                            <input type="text" class="form-control" id="password" name="password"/>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="signup_btn">Sign up</button>
+                </div>
+            </div>
+        </div>
     </div>
     <script type="text/javascript">
-        function signup(){
-            $("#signup_page").css('visibility', 'visible');
-        }
-        $("#signup").keyup(function(event){ 
-            if(event.which=='27'){ 
-                $("#signup_page").css('visibility', 'hidden');
-            } 
+
+        $("#logout").click(function(){
+            window.location.href="index.php?logout";
         });
+        $("#signup_btn").click( function(){
+            $("#signup_form").submit();
+        });
+        
     </script>
 </body>
 </html>
