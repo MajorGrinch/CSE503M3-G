@@ -14,11 +14,13 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     }
     $stmt->bind_param("ss", $username, $password);
     if ($stmt->execute()) {
-        echo "<script language=\"JavaScript\">
-            alert(\"Sign up successfully!!!\");
-            window.location.href=\"index.php\";
-            </script>";
+        $exc = true;
     }
     $stmt->close();
-    // header("Location: index.php");
+    if ($exc) {
+        echo "<script language=\"JavaScript\">
+        alert(\"Sign up successfully!!!\");
+        window.location.href=\"index.php\";
+        </script>";
+    }
 }

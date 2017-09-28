@@ -1,14 +1,58 @@
 #story h1{
     text-align: center;
-    font-size: 4em;
+    font-size: 3em;
 }
-#story h4{
+#story h6{
     text-align: center;
+    margin-top: 10px;
 }
 #story{
-    width: 80%;
-    margin-left: 10%;
+    width: 70%;
+    margin-left: 15%;
 }
+
 #story p{
+    margin-top: 10px;
     font-size: 1.8em;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#author{
+    width: 50%;
+    float:left;
+}
+
+#issue_date{
+    width: 50%;
+    float: right;
+}
+
+#comment{
+    width: 70%;
+    margin-left: 15%;
+}
+
+#comment_header{
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+/* #comment_header_text{
+    position: relative;
+} */
+
+#write_comment{
+    position: absolute;
+    right: 15%;
+}
+
+#comment_item{
+    margin-top: 5px;
+}
+#my_comment{
+    display: none;
+}
+
+#storyid_input{
+    display: none;
 }

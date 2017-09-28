@@ -18,8 +18,8 @@ create table stories(
 create table comments(
 	comment_id int not null auto_increment,
 	content text not null,
-	agree int not null,
-	oppose int not null,
+	agree int not null default 0,
+	oppose int not null default 0,
 	userid int not null,
 	type tinyint not null,
 	link_comment int,

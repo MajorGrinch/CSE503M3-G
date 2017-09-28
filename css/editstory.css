@@ -1,0 +1,17 @@
+#wrap-header{
+    text-align: center;
+    margin-top: 2%;
+}
+
+#wrap-main{
+    width: 70%;
+    margin-left: 15%;
+    text-align: center;
+}
+#backtoindex{
+    margin-top: 1%;
+}
+
+#story_id{
+	display: none;
+}
