@@ -18,9 +18,9 @@ session_start();
 
     <div id="header">
         <?php if (isset($_SESSION['user'])) : ?>
-        <div id="welcome"><h1 class="display-3">Welcome, <?php echo $_SESSION['user'] ?></h1></div>
+        <div id="welcome"><h1>Welcome, <?php echo $_SESSION['user'] ?></h1></div>
         <?php else : ?>
-        <div id="welcome"><h1 class="display-3">Welcome to Kevin and Miao's News Forum</h1></div>
+        <div id="welcome"><h1>Welcome to Kevin and Miao's News Forum</h1></div>
         <?php endif;?>
     </div>
 

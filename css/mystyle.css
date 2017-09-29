@@ -1,5 +1,8 @@
+/* 内容 */
 #content{
-    margin-top: 3%;
+    font-family: sans-serif;  /* 无衬线体 */
+    margin-top: 5%;
+
 }
 
 #news_list{
@@ -7,15 +10,21 @@
     margin-left: 15%;
     float: left;
 }
+
+/* Welcome, Chuanqi */
 #welcome{
+    font-family: sans-serif;
     text-align: center;
-    margin-top: 2%;
+    margin-top: 5%;
+    /*letter-spacing: em;*/
 }
+
+
 #sidebar{
     width: 15%;
     float: right;
     text-align: center;
-    margin-top: 1%;
+    margin-top: 0%;
     margin-right: 2%;
     height: 100%;
 }
@@ -37,7 +46,7 @@
 }
 
 html{
-    font-family: 'Times New Roman', Times, serif;
+    /*font-family: , Times, serif;*/
 }
 
 #mgr_list{
