@@ -1,23 +1,23 @@
 <?php
 session_start();
-if(!isset($_SESSION['userid'])){
+if (!isset($_SESSION['userid'])) {
     header("Location: index.php");
 }
 require 'database.php';
 $userid = $_SESSION['userid'];
 if (isset($_GET['story_id'])) {
-                $id = (int)$_GET['story_id'];
-                $stmt = $mysqli->prepare("select title, content from stories where story_id=?");
-                if (!$stmt) {
-                    printf("Query Prep Failed: %s\n", $mysqli->error);
-                    exit;
-                }
-                $stmt->bind_param('i', $id);
-                $stmt->execute();
-                $stmt->bind_result($title, $content);
-                $stmt->fetch();
-                $stmt->close();
-            }
+    $id = (int)$_GET['story_id'];
+    $stmt = $mysqli->prepare("select title, content from stories where story_id=?");
+    if (!$stmt) {
+        printf("Query Prep Failed: %s\n", $mysqli->error);
+        exit;
+    }
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $stmt->bind_result($title, $content);
+    $stmt->fetch();
+    $stmt->close();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

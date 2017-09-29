@@ -17,16 +17,16 @@ session_start();
 <body>
 
     <div id="header">
-        <?php if (isset($_SESSION['user'])): ?>
+        <?php if (isset($_SESSION['user'])) : ?>
         <div id="welcome"><h1 class="display-3">Welcome, <?php echo $_SESSION['user'] ?></h1></div>
-        <?php else: ?>
+        <?php else : ?>
         <div id="welcome"><h1 class="display-3">Welcome to Kevin and Miao's News Forum</h1></div>
         <?php endif;?>
     </div>
 
     <div id="content" class="container-fluid">
         <div id="sidebar">
-            <?php if (!isset($_SESSION['user'])): ?>
+            <?php if (!isset($_SESSION['user'])) : ?>
                 <form action="login.php" method="post">
                     <div class="form-group">
                         <label for="username">Username</label>
@@ -39,7 +39,7 @@ session_start();
                     <button type="submit" class="btn btn-primary">Sign in</button>
                 </form>
                 <button type="button" class="btn btn-secondary" data-toggle="modal" data-target=".bs-example-modal-sm">Sign up</button>
-            <?php else: ?>
+            <?php else : ?>
                 <div id="account_mgr" class="btn-group-vertical">
                     <button type="button" class="btn btn-secondary btn-lg" id="writestory">Write A Story</button>
                     <button type="button" class="btn btn-secondary btn-lg" id="man_my_stories">My Stories</button>
@@ -137,7 +137,7 @@ session_start();
             $.ajax({
                 type: "POST",
                 url: "showmystory.php",
-                data: "userid=" + "<?php echo $_SESSION['userid'] ?>",
+                data: "userid=" + "<?php echo isset($_SESSION['userid']) ? $_SESSION['userid'] : -1; ?>",
                 success : function(data){
                     $("#news_list").append(data);
                 }
