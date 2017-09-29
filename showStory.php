@@ -85,6 +85,7 @@ session_start();
                     <div class="card" id="comment_item">
                         <div class="card-body">
                         <h5 class="card-title"><?php echo $username; ?></h5>
+                        <a href="" class="card-subtitle text-muted" id="comment_delete">Delete</a>
                         <p class="card-text"><?php echo $content; ?></p>
                         </div>
                     </div>
@@ -103,6 +104,16 @@ session_start();
             $("#my_comment").show();
         }
     }
+
+    $('div[id*="comment_item"]').hover(function(){
+        $(this).find("a").css("visibility", "visible");
+        },function(){
+        $(this).find("a").css("visibility", "hidden");
+        }
+    );
+    $('a[id*="comment_delete"]').click(function(){
+        alert("delete");
+    });
     </script>
 
 </body>

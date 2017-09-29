@@ -56,3 +56,14 @@
 #storyid_input{
     display: none;
 }
+
+#comment_delete{
+    width: 50%;
+    float: right;
+    text-align: right;
+    visibility: hidden;
+}
+
+/*#comment_delete:hover{
+    text-decoration: underline;
+}*/
