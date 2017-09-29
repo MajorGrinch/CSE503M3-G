@@ -44,9 +44,12 @@ session_start();
                     <p class="card-text"><?php echo htmlentities($content); ?></p>
                     <div align="center">
                         <a href="index.php" class="card-link">Home</a>
-                        <?php if($userid === $_SESSION['userid']){ ?>
+                        <?php
+                        if(isset($_SESSION['userid'])){
+                            if($userid === $_SESSION['userid']){ ?>
                             <a href="editstory.php?story_id=<?php echo $id; ?>" class="card-link">Edit</a>
                         <?php
+                            }
                         }
                         ?>
                     </div>
