@@ -48,6 +48,7 @@ session_start();
                         if(isset($_SESSION['userid'])){
                             if($userid === $_SESSION['userid']){ ?>
                             <a href="editstory.php?story_id=<?php echo $id; ?>" class="card-link">Edit</a>
+                            <a href="deletestory.php?story_id=<?php echo $id; ?>" class="card-link">Delete</a>
                         <?php
                             }
                         }
