@@ -8,7 +8,8 @@ session_start();
     <title>Kevin Miao Forum</title>
     <link rel="stylesheet" type="text/css" href="css/mainstory.css"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
+    <script src="js/jquery-3.2.1.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
 
@@ -73,19 +74,34 @@ session_start();
             </div>
             <div id="comment_body">
                 <?php
-                $stmt = $mysqli->prepare("select username, content from comments join users on comments.userid=users.userid where story_id=?");
+                $stmt = $mysqli->prepare("select comment_id, username, content, comments.userid from comments join users on comments.userid=users.userid where story_id=?");
                 if (!$stmt) {
                     printf("Query Prep Failed: %s\n", $mysqli->error);
                     exit;
                 }
                 $stmt->bind_param('i', $id);
                 $stmt->execute();
-                $stmt->bind_result($username, $content);
+                $stmt->bind_result($comment_id,$username, $content, $comment_uid);
                 while ($stmt->fetch()) { ?>
                     <div class="card" id="comment_item">
                         <div class="card-body">
                         <h5 class="card-title"><?php echo $username; ?></h5>
-                        <a href="" class="card-subtitle text-muted" id="comment_delete">Delete</a>
+                        <?php
+                        if(isset($_SESSION['userid'])){
+                            if(($userid === $_SESSION['userid']) || ($comment_uid === $_SESSION['userid']) ){ ?>
+                            <a href="" class="card-link" id="comment_delete" val="<?php echo $comment_id; ?>">Delete</a>
+                        <?php
+                            }
+                        }
+                        ?>
+                        <?php
+                        if(isset($_SESSION['userid'])){
+                            if($comment_uid === $_SESSION['userid']){ ?>
+                            <a href="#" class="card-link" id="comment_edit" val="<?php echo $comment_id; ?>">Edit</a>
+                        <?php
+                            }
+                        }
+                        ?>
                         <p class="card-text"><?php echo $content; ?></p>
                         </div>
                     </div>
@@ -112,8 +128,34 @@ session_start();
         }
     );
     $('a[id*="comment_delete"]').click(function(){
-        alert("delete");
+        var comment_id = $(this).attr('val');
+        $.post("comment_op.php",{ comment_id: comment_id, op:'delete'})
+            .done(function(data){
+                alert(data);
+            });
     });
+
+    $('a[id*="comment_edit"]').click(function(){
+        var comment_id = $(this).attr('val');
+        var current_comment_item = $(this).parents("div[id='comment_item']");
+        // current_comment_item.empty();
+        var current_comment_content = current_comment_item.find("p").text();
+        // alert(current_comment_content);
+        current_comment_item.empty();
+        current_comment_item.append("<textarea>"+current_comment_content+"</textarea>");
+        current_comment_item.append('<button class="btn btn-secondary" id="edit_comment_btn">Submit</button>');
+        current_comment_item.on('click', '#edit_comment_btn', function(){
+            // alert(current_comment_item.find("textarea").val());
+            $.post("comment_op.php", {comment_id: comment_id, op: 'edit', 
+                content: current_comment_item.find("textarea").val() })
+                .done(function(data){
+                    alert(data);
+                    window.location.href="";
+                });
+        });
+    });
+
+
     </script>
 
 </body>

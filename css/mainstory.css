@@ -58,12 +58,14 @@
 }
 
 #comment_delete{
-    width: 50%;
+    width: 5%;
     float: right;
     text-align: right;
     visibility: hidden;
 }
 
-/*#comment_delete:hover{
-    text-decoration: underline;
-}*/
+#comment_edit{
+    visibility: hidden;
+    text-align: right;
+    float: right;
+}
