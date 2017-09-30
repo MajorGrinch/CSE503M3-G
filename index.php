@@ -17,16 +17,16 @@ session_start();
 <body>
 
     <div id="header">
-        <?php if (isset($_SESSION['user'])) : ?>
+        <?php if (isset($_SESSION['user'])): ?>
         <div id="welcome"><h1>Welcome, <?php echo $_SESSION['user'] ?></h1></div>
-        <?php else : ?>
+        <?php else: ?>
         <div id="welcome"><h1>Welcome to Kevin and Miao's News Forum</h1></div>
         <?php endif;?>
     </div>
 
     <div id="content" class="container-fluid">
         <div id="sidebar">
-            <?php if (!isset($_SESSION['user'])) : ?>
+            <?php if (!isset($_SESSION['user'])): ?>
                 <form action="login.php" method="post">
                     <div class="form-group">
                         <label for="username">Username</label>
@@ -39,7 +39,7 @@ session_start();
                     <button type="submit" class="btn btn-primary">Sign in</button>
                 </form>
                 <button type="button" class="btn btn-secondary" data-toggle="modal" data-target=".bs-example-modal-sm">Sign up</button>
-            <?php else : ?>
+            <?php else: ?>
                 <div id="account_mgr" class="btn-group-vertical">
                     <button type="button" class="btn btn-secondary btn-lg" id="writestory">Write A Story</button>
                     <button type="button" class="btn btn-secondary btn-lg" id="man_my_stories">My Stories</button>
@@ -47,25 +47,25 @@ session_start();
                 </div>
             <?php endif;?>
             <?php
-            if (isset($_GET['logout'])) {
-                unset($_SESSION['user']);
-                unset($_SESSION['userid']);
-                header("Location:index.php");
-            }
-            ?>
+if (isset($_GET['logout'])) {
+    unset($_SESSION['user']);
+    unset($_SESSION['userid']);
+    header("Location:index.php");
+}
+?>
         </div>
         <div id="news_list">
         <?php
-        require 'database.php';
-        $stmt = $mysqli->prepare("select story_id, title, issue_date, username, left(content,200) as depiction from stories join users on stories.userid=users.userid order by issue_date desc");
+require 'database.php';
+$stmt = $mysqli->prepare("select story_id, title, issue_date, username, left(content,200) as depiction from stories join users on stories.userid=users.userid order by issue_date desc");
 
-        if (!$stmt) {
-            printf("Query Prep Failed: %s\n", $mysqli->error);
-            exit;
-        }
-        $stmt->execute();
-        $result = $stmt->get_result();
-        while ($row = $result->fetch_assoc()) {?>
+if (!$stmt) {
+    printf("Query Prep Failed: %s\n", $mysqli->error);
+    exit;
+}
+$stmt->execute();
+$result = $stmt->get_result();
+while ($row = $result->fetch_assoc()) {?>
                         <div class="card">
                         <div class="card-body">
                             <a href="showStory.php?id=<?php echo $row['story_id']; ?>"><h4 class="card-title"><?php echo $row["title"] ?></h4></a>
@@ -75,9 +75,9 @@ session_start();
                         </div>
                       </div>
                     <?php
-        }
-        $stmt->close();
-        ?>
+}
+$stmt->close();
+?>
 
         </div>
     </div>
@@ -143,6 +143,35 @@ session_start();
                 }
             });
         });
+
+        var sidebar = $("#sidebar");
+        var offsetY = sidebar.offset().top;
+
+        // function onScroll(e) {
+        //     console.log("detect scroll");
+        //     $(window).scrollTop() >= offsetY ? sidebar.addClass('fixed') :
+        //                           sidebar.removeClass('fixed');
+        // }
+
+        // function fixDiv() {
+        //     if ($(window).scrollTop() >= offsetY-60){
+        //         console.log("fixed");
+        //         sidebar.css({
+        //             'position': 'fixed',
+        //             'top': 60+'px',
+        //             'left': '82%'
+        //       });}
+        //     else{
+        //         console.log("relative");
+        //         sidebar.css({
+        //             'width': '15%',
+        //             'position': 'fixed',
+        //             'left': '82%',
+        //             'top': offsetY+'px'
+        //       });}
+        // }
+        
+        // $(window).scroll(fixDiv);
 
     </script>
 </body>

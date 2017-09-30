@@ -1,79 +1,93 @@
 /* 内容 */
-#content{
-    font-family: sans-serif;  /* 无衬线体 */
-    margin-top: 5%;
 
+#content {
+    font-family: sans-serif;
+    /* 无衬线体 */
+    margin-top: 5%;
 }
 
-#news_list{
+#news_list {
     width: 65%;
     margin-left: 15%;
     float: left;
 }
 
+
 /* Welcome, Chuanqi */
-#welcome{
+
+#welcome {
     font-family: sans-serif;
     text-align: center;
     margin-top: 5%;
     /*letter-spacing: em;*/
 }
 
-
-#sidebar{
+#sidebar {
     width: 15%;
-    float: right;
     text-align: center;
-    margin-top: 0%;
-    margin-right: 2%;
-    height: 100%;
+    position: fixed;
+    left: 82%;
+    top: 23%;
 }
-.sidebarinput{
+
+.sidebarinput {
     width: 60%;
 }
 
-#account_mgr{
+#account_mgr {
     width: 100%;
     margin-left: 5%;
     font-size: 1.5em;
 }
+
+
 /* #account_mgr button{
     margin-bottom: 15px;
 } */
 
-#mgr_item{
+#mgr_item {
     margin-top: 10px;
 }
 
-html{
+html {
     /*font-family: , Times, serif;*/
 }
 
-#mgr_list{
+#mgr_list {
     margin-bottom: 10px;
 }
 
-.btn{
+.btn {
     width: 50%;
     margin-bottom: 10px;
 }
 
-.form-control{
+.form-control {
     width: 60%;
 }
-.card{
+
+.card {
     margin-bottom: 10px;
 }
-.card-body p{
+
+.card-body p {
     margin-bottom: 5px;
 }
-.btn btn-secondary{
+
+.btn btn-secondary {
     width: 80%;
 }
 
-#myModalLabel{
+#myModalLabel {
     text-align: center;
 }
-#confirmation_error{
+
+#confirmation_error {
     display: none;
+}
+
+.fixed {
+    position: fixed;
+    top: 0;
+    /*z-index: 99999;*/
 }

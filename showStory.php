@@ -97,7 +97,7 @@ session_start();
                         <?php
                         if(isset($_SESSION['userid'])){
                             if($comment_uid === $_SESSION['userid']){ ?>
-                            <a href="#" class="card-link" id="comment_edit" val="<?php echo $comment_id; ?>">Edit</a>
+                            <a href="#/" class="card-link" id="comment_edit" val="<?php echo $comment_id; ?>">Edit</a>
                         <?php
                             }
                         }
@@ -118,6 +118,8 @@ session_start();
             alert("Please sign in to comment!");
         }else{
             $("#my_comment").show();
+            var my_comment = $("#my_comment");
+            $(window).scrollTop(my_comment.offset().top-300);
         }
     }
 
