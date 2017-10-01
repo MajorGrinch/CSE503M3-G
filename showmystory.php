@@ -10,16 +10,24 @@ if(isset($_POST['userid'])) {
         exit;
     }
     $stmt->execute();
-    $stmt->bind_result($story_id, $title, $issue_date, $username, $depiction);
-    while ($stmt->fetch()) {
-        printf('<div class="card">
-                        <div class="card-body">
-                            <a href="showStory.php?id=%s"><h4 class="card-title">%s</h4></a>
-                            <h6 class="card-subtitle mb-2 text-muted">%s</h6>
-                            <h6 class="card-subtitle mb-2 text-muted">%s</h6>
-                            <p>%s...</p>
-                        </div>
-                      </div>', htmlspecialchars($story_id), htmlspecialchars($title),
-            htmlspecialchars($issue_date), htmlspecialchars($username), htmlspecialchars($depiction));
+    $result = $stmt->get_result();
+    $result_array = array();
+    while($row = $result->fetch_assoc()){
+        array_push($result_array, $row);
     }
+    print(json_encode($result_array));
+    // $stmt->bind_result($story_id, $title, $issue_date, $username, $depiction);
+
+    // while ($stmt->fetch()) {
+    //     printf('<div class="card">
+    //                     <div class="card-body">
+    //                         <a href="showStory.php?id=%s"><h4 class="card-title">%s</h4></a>
+    //                         <h6 class="card-subtitle mb-2 text-muted">%s</h6>
+    //                         <h6 class="card-subtitle mb-2 text-muted">%s</h6>
+    //                         <p>%s...</p>
+    //                     </div>
+    //                   </div>', htmlspecialchars($story_id), htmlspecialchars($title),
+    //         htmlspecialchars($issue_date), htmlspecialchars($username), htmlspecialchars($depiction));
+    // }
+    $stmt->close();
 }

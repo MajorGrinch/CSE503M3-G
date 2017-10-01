@@ -84,3 +84,12 @@
 #oppose_num{
     width: 5%;
 }
+
+#reply_comment_btn{
+    width: 8%;
+    margin-right: 2%;
+}
+
+#check_all_replies_btn{
+    width: 8%;
+}

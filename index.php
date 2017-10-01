@@ -42,6 +42,7 @@ session_start();
             <?php else: ?>
                 <div id="account_mgr" class="btn-group-vertical">
                     <button type="button" class="btn btn-secondary btn-lg" id="writestory">Write A Story</button>
+                    <button type="button" class="btn btn-secondary btn-lg" id="allstories">All Stories</button>
                     <button type="button" class="btn btn-secondary btn-lg" id="man_my_stories">My Stories</button>
                     <button type="button" class="btn btn-secondary btn-lg" id="logout">Logout</button>
                 </div>
@@ -134,46 +135,31 @@ $stmt->close();
             window.location.href="writestory.php";
         });
         $("#man_my_stories").click(function(){
+            var news_list = $("#news_list");
             $("#news_list").empty();
             $.ajax({
                 type: "POST",
                 url: "showmystory.php",
                 data: "userid=" + "<?php echo isset($_SESSION['userid']) ? $_SESSION['userid'] : -1; ?>",
                 success : function(data){
-                    $("#news_list").append(data);
+                    // $("#news_list").append(data);
+                    // console.log(data);
+                    var jsonobj = jQuery.parseJSON(data);
+                    console.log(jsonobj);
+                    jsonobj.forEach(function(news_item){
+                        console.log(news_item);
+                        news_list.append('<div class="card"><div class="card-body"><a href="showStory.php?id='+news_item['story_id']+'"><h4 class="card-title">'+news_item['title']+'</h4></a><h6 class="card-subtitle mb-2 text-muted">'+news_item['issue_date']+'</h6><h6 class="card-subtitle mb-2 text-muted">'+news_item['username']+'</h6><p>'+news_item['depiction']+'...</p></div></div>')
+                    });
                 }
             });
         });
 
+        $("#allstories").click(function(){
+            window.location.href="";
+        });
+
         var sidebar = $("#sidebar");
         var offsetY = sidebar.offset().top;
-
-        // function onScroll(e) {
-        //     console.log("detect scroll");
-        //     $(window).scrollTop() >= offsetY ? sidebar.addClass('fixed') :
-        //                           sidebar.removeClass('fixed');
-        // }
-
-        // function fixDiv() {
-        //     if ($(window).scrollTop() >= offsetY-60){
-        //         console.log("fixed");
-        //         sidebar.css({
-        //             'position': 'fixed',
-        //             'top': 60+'px',
-        //             'left': '82%'
-        //       });}
-        //     else{
-        //         console.log("relative");
-        //         sidebar.css({
-        //             'width': '15%',
-        //             'position': 'fixed',
-        //             'left': '82%',
-        //             'top': offsetY+'px'
-        //       });}
-        // }
-        
-        // $(window).scroll(fixDiv);
-
     </script>
 </body>
 </html>
