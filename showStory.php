@@ -33,16 +33,17 @@ session_start();
                 $stmt->bind_result($userid, $title, $issue_date, $username, $content);
                 $stmt->fetch();
                 $stmt->close();
+                // print(htmlspecialchars($content));
             }
             ?>
             <div class="card">
                 <div class="card-body">
-                    <h1 class="card-title"><?php echo $title; ?></h1>
+                    <h1 class="card-title"><?php printf($title); ?></h1>
                     <br/>
-                    <h6 class="card-subtitle mb-2 text-muted" id="author">Author: <?php echo $username; ?></h6>
-                    <h6 class="card-subtitle mb-2 text-muted" id="issue_date">Issue date: <?php echo $issue_date; ?></h6>
+                    <h6 class="card-subtitle mb-2 text-muted" id="author">Author: <?php printf($username); ?></h6>
+                    <h6 class="card-subtitle mb-2 text-muted" id="issue_date">Issue date: <?php printf($issue_date); ?></h6>
                     <br/><br/>
-                    <p class="card-text"><?php echo htmlentities($content); ?></p>
+                    <p class="card-text"><?php print(htmlspecialchars($content)); ?></p>
                     <div align="center">
                         <a href="index.php" class="card-link">Home</a>
                         <?php
@@ -74,22 +75,22 @@ session_start();
             </div>
             <div id="comment_body">
                 <?php
-                $stmt = $mysqli->prepare("select comment_id, username, content, comments.userid from comments join users on comments.userid=users.userid where story_id=?");
+                $stmt = $mysqli->prepare("select comment_id, username, content, agree, oppose, comments.userid from comments join users on comments.userid=users.userid where story_id=?");
                 if (!$stmt) {
                     printf("Query Prep Failed: %s\n", $mysqli->error);
                     exit;
                 }
                 $stmt->bind_param('i', $id);
                 $stmt->execute();
-                $stmt->bind_result($comment_id,$username, $content, $comment_uid);
+                $stmt->bind_result($comment_id,$username, $content, $agree, $oppose, $comment_uid);
                 while ($stmt->fetch()) { ?>
-                    <div class="card" id="comment_item">
+                    <div class="card" id="comment_item" val="<?php echo $comment_id ?>">
                         <div class="card-body">
-                        <h5 class="card-title"><?php echo $username; ?></h5>
+                        <h5 class="card-title"><?php printf(htmlspecialchars($username)); ?></h5>
                         <?php
                         if(isset($_SESSION['userid'])){
                             if(($userid === $_SESSION['userid']) || ($comment_uid === $_SESSION['userid']) ){ ?>
-                            <a href="" class="card-link" id="comment_delete" val="<?php echo $comment_id; ?>">Delete</a>
+                            <a href="" class="card-link" id="comment_delete">Delete</a>
                         <?php
                             }
                         }
@@ -97,12 +98,16 @@ session_start();
                         <?php
                         if(isset($_SESSION['userid'])){
                             if($comment_uid === $_SESSION['userid']){ ?>
-                            <a href="#/" class="card-link" id="comment_edit" val="<?php echo $comment_id; ?>">Edit</a>
+                            <a href="#/" class="card-link" id="comment_edit">Edit</a>
                         <?php
                             }
                         }
                         ?>
-                        <p class="card-text"><?php echo $content; ?></p>
+                        <p class="card-text" id="comment_content"><?php printf(htmlspecialchars($content)); ?></p>
+                        <img src="image/agree.png" val="0" alt="agree" id="agree_btn" width="20px" height="20px"/>
+                        <label id="agree_num" for="agree_btn"><?php printf(htmlspecialchars($agree)); ?></label>
+                        <img src="image/oppose.png" val="0" alt="oppose" id="oppose_btn" width="20px" height="20px"/>
+                        <label id="oppose_num" for="oppose_btn"><?php printf(htmlspecialchars($oppose)); ?></label>
                         </div>
                     </div>
                 <?php
@@ -123,6 +128,12 @@ session_start();
         }
     }
 
+    function get_comment_id(node){
+        var current_comment_item = node.parents("div[id='comment_item']");
+        var comment_id = current_comment_item.attr('val');
+        return comment_id;
+    }
+
     $('div[id*="comment_item"]').hover(function(){
         $(this).find("a").css("visibility", "visible");
         },function(){
@@ -130,21 +141,68 @@ session_start();
         }
     );
     $('a[id*="comment_delete"]').click(function(){
-        var comment_id = $(this).attr('val');
+        var comment_id = get_comment_id($(this));
         $.post("comment_op.php",{ comment_id: comment_id, op:'delete'})
             .done(function(data){
                 alert(data);
             });
     });
 
-    $('a[id*="comment_edit"]').click(function(){
-        var comment_id = $(this).attr('val');
+    $('img[id*="agree_btn"]').click(function(){
+        var is_login = "<?php echo isset($_SESSION['userid']) ? $_SESSION['userid'] : -1;?>";
+        if( is_login == "-1" ){
+            alert("Please sign in to agree!");
+            return;
+        }
+        var val = parseInt($(this).attr('val'));
+        if(val == 1){
+            return;
+        }
+        var image = $(this);
+        var comment_id = get_comment_id($(this));
         var current_comment_item = $(this).parents("div[id='comment_item']");
-        // current_comment_item.empty();
-        var current_comment_content = current_comment_item.find("p").text();
-        // alert(current_comment_content);
+        var agree_num_label = current_comment_item.find("#agree_num");
+         $.post("comment_op.php", {comment_id: comment_id, op: 'agree'})
+            .done(function(data){
+                // alert(agree_num_p);
+                if(data==-1){
+                    return;
+                }
+                agree_num_label.text(data);
+                image.attr('src', 'image/agreed.png');
+            });
+    });
+
+    $('img[id*="oppose_btn"]').click(function(){
+        var is_login = "<?php echo isset($_SESSION['userid']) ? $_SESSION['userid'] : -1;?>";
+        if( is_login == "-1" ){
+            alert("Please sign in to oppose!");
+            return;
+        }
+        var val = parseInt($(this).attr('val'));
+        if(val == 1){
+            return;
+        }
+        var image = $(this);
+        var comment_id = get_comment_id($(this));
+        var current_comment_item = $(this).parents("div[id='comment_item']");
+        var oppose_num_label = current_comment_item.find("#oppose_num");
+         $.post("comment_op.php", {comment_id: comment_id, op: 'oppose'})
+            .done(function(data){
+                if(data==-1){
+                    return;
+                }
+                image.attr('src','image/opposed.png');
+                oppose_num_label.text(data);
+            });
+    });
+
+    $('a[id*="comment_edit"]').click(function(){
+        var comment_id = get_comment_id($(this));
+        var current_comment_item = $(this).parents("div[id='comment_item']");
+        var current_comment_content = current_comment_item.find("#comment_content").text();
         current_comment_item.empty();
-        current_comment_item.append("<textarea>"+current_comment_content+"</textarea>");
+        current_comment_item.append("<textarea rows='5'>"+current_comment_content+"</textarea>");
         current_comment_item.append('<button class="btn btn-secondary" id="edit_comment_btn">Submit</button>');
         current_comment_item.on('click', '#edit_comment_btn', function(){
             // alert(current_comment_item.find("textarea").val());
@@ -157,6 +215,35 @@ session_start();
         });
     });
 
+    $(document).ready(function(){
+        $('#comment_body #agree_btn').each(function(){
+                var comment_id = get_comment_id($(this));
+                var userid = "<?php echo isset($_SESSION['userid']) ? $_SESSION['userid'] : -1;?>";
+                var image = $(this);
+                $.post("comment_op.php", {comment_id: comment_id, userid: userid, op:'check_record' })
+                    .done(function(data){
+                        var records_num = parseInt(data);
+                        if(records_num == 1){
+                            image.attr('src', 'image/agreed.png');
+                            image.attr('val', '1');
+                        }
+                    });
+            });
+        $('#comment_body #oppose_btn').each(function(){
+                var comment_id = get_comment_id($(this));
+                var userid = "<?php echo isset($_SESSION['userid']) ? $_SESSION['userid'] : -1;?>";
+                var image = $(this);
+                $.post("comment_op.php", {comment_id: comment_id, userid: userid, op:'check_record' })
+                    .done(function(data){
+                        var records_num = parseInt(data);
+                        if(records_num == 1){
+                            image.attr('src', 'image/opposed.png');
+                            image.attr('val', '1');
+                        }
+                    });
+            });
+
+    });
 
     </script>
 

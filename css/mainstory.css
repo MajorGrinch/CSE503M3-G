@@ -69,3 +69,18 @@
     text-align: right;
     float: right;
 }
+
+#agree_btn{
+    cursor: pointer;
+}
+
+#oppose_btn{
+    cursor: pointer;
+}
+
+#agree_num{
+    width: 5%;
+}
+#oppose_num{
+    width: 5%;
+}
