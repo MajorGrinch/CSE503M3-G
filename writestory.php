@@ -20,6 +20,7 @@ session_start();
         </div>
         <div id="wrap-main">
         <form action="addstory.php" method="post">
+            <input type="hidden" name="token" value="<?php echo $_SESSION['token'];?>" />
             <div class="form-group">
                 <label for="story_title">Title</label>
                 <input type="text" name="story_title" class="form-control" id="story_title" placeholder="Type title here...">

@@ -5,6 +5,9 @@ $is_publish = false;
 if (!isset($_SESSION['userid'])) {
     header("Location: index.php");
 }
+if(!hash_equals($_SESSION['token'], $_POST['token'])){
+    die("Request forgery detected");
+}
 if (isset($_POST['story_title']) && isset($_POST['story_content'])) {
     $title = $_POST['story_title'];
     $content = $_POST['story_content'];

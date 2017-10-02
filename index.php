@@ -51,6 +51,7 @@ session_start();
 if (isset($_GET['logout'])) {
     unset($_SESSION['user']);
     unset($_SESSION['userid']);
+    unset($_SESSION['token']);
     session_destroy();
     header("Location:index.php");
 }
@@ -137,22 +138,18 @@ $stmt->close();
         $("#man_my_stories").click(function(){
             var news_list = $("#news_list");
             $("#news_list").empty();
-            $.ajax({
-                type: "POST",
-                url: "showmystory.php",
-                data: "userid=" + "<?php echo isset($_SESSION['userid']) ? $_SESSION['userid'] : -1; ?>",
-                success : function(data){
+            $.post("showmystory.php",{token: "<?php echo $_SESSION['token'];?>"})
+                .done(function(data){
                     // $("#news_list").append(data);
-                    // console.log(data);
+                    console.log(data);
                     var jsonobj = jQuery.parseJSON(data);
                     console.log(jsonobj);
                     jsonobj.forEach(function(news_item){
                         console.log(news_item);
                         news_list.append('<div class="card"><div class="card-body"><a href="showStory.php?id='+news_item['story_id']+'"><h4 class="card-title">'+news_item['title']+'</h4></a><h6 class="card-subtitle mb-2 text-muted">'+news_item['issue_date']+'</h6><h6 class="card-subtitle mb-2 text-muted">'+news_item['username']+'</h6><p>'+news_item['depiction']+'...</p></div></div>')
                     });
-                }
+                });
             });
-        });
 
         $("#allstories").click(function(){
             window.location.href="";

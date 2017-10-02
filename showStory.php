@@ -66,6 +66,7 @@ if (isset($_SESSION['userid'])) {
             </div>
             <div id="my_comment">
                 <form action="comment_op.php" method="post">
+                    <input type="hidden" name="token" value="<?php echo $_SESSION['token'];?>" />
                     <div class="form-group">
                         <textarea class="form-control" name="comment_input" rows="5"></textarea>
                         <input name="story_id" value="<?php echo $id; ?>" id="storyid_input" />
@@ -148,32 +149,40 @@ if (isset($_SESSION['userid'])) {
     );
     $('a[id*="comment_delete"]').click(function(){
         var comment_id = get_comment_id($(this));
-        $.post("comment_op.php",{ comment_id: comment_id, op:'delete'})
+        $.post("comment_op.php",{ comment_id: comment_id, op:'delete', token: "<?php echo $_SESSION['token'];?>"})
             .done(function(data){
                 alert(data);
             });
     });
 
+    var reply_btn_clicks = 0;
     $('a[id*="reply_comment_btn"]').click(function(){
-        var comment_id = get_comment_id($(this));
-        var current_comment_item = $(this).parents("div[id='comment_item']");
-        var reply_num_label = current_comment_item.find("#reply_num");
-        current_comment_item.append('<textarea rows="4" id="reply_content"></textarea>');
-        current_comment_item.append('<button class="btn btn-secondary" id="reply_comment_submit">reply</button>');
-        current_comment_item.on('click', '#reply_comment_submit', function(){
-            $.post("comment_op.php",
-                {comment_id: comment_id, op:'reply_comment', content: current_comment_item.find("textarea").val() })
-                .done(function(data){
-                    console.log(data);
-                    if(data == -1){
-                        alert("Please login to reply!");
-                    }
-                    window.location.href="#/";
-                    $("#reply_content").remove();
-                    $("#reply_comment_submit").remove();
-                    reply_num_label.text(data);
-                });
-        });
+        if(reply_btn_clicks == 0){
+            var comment_id = get_comment_id($(this));
+            var current_comment_item = $(this).parents("div[id='comment_item']");
+            var reply_num_label = current_comment_item.find("#reply_num");
+            current_comment_item.append('<textarea rows="4" id="reply_content"></textarea>');
+            current_comment_item.append('<button class="btn btn-secondary" id="reply_comment_submit">reply</button>');
+            current_comment_item.on('click', '#reply_comment_submit', function(){
+                $.post("comment_op.php",
+                    {comment_id: comment_id, op:'reply_comment', content: current_comment_item.find("textarea").val(), token: "<?php echo $_SESSION['token'];?>" })
+                    .done(function(data){
+                        console.log(data);
+                        if(data == -1){
+                            alert("Please login to reply!");
+                        }
+                        window.location.href="#/";
+                        $("#reply_content").remove();
+                        $("#reply_comment_submit").remove();
+                        reply_num_label.text(data);
+                    });
+            });
+            reply_btn_clicks++;
+        }else{
+            reply_btn_clicks = 0;
+            $("#reply_content").remove();
+            $("#reply_comment_submit").remove();
+        }
     });
 
     $('img[id*="agree_btn"]').click(function(){
@@ -190,7 +199,7 @@ if (isset($_SESSION['userid'])) {
         var comment_id = get_comment_id($(this));
         var current_comment_item = $(this).parents("div[id='comment_item']");
         var agree_num_label = current_comment_item.find("#agree_num");
-         $.post("comment_op.php", {comment_id: comment_id, op: 'agree'})
+         $.post("comment_op.php", {comment_id: comment_id, op: 'agree',token: "<?php echo $_SESSION['token'];?>"})
             .done(function(data){
                 // alert(agree_num_p);
                 if(data==-1){
@@ -215,7 +224,7 @@ if (isset($_SESSION['userid'])) {
         var comment_id = get_comment_id($(this));
         var current_comment_item = $(this).parents("div[id='comment_item']");
         var oppose_num_label = current_comment_item.find("#oppose_num");
-         $.post("comment_op.php", {comment_id: comment_id, op: 'oppose'})
+         $.post("comment_op.php", {comment_id: comment_id, op: 'oppose',token: "<?php echo $_SESSION['token'];?>"})
             .done(function(data){
                 if(data==-1){
                     return;
@@ -234,7 +243,7 @@ if (isset($_SESSION['userid'])) {
         current_comment_item.append('<button class="btn btn-secondary" id="edit_comment_btn">Submit</button>');
         current_comment_item.on('click', '#edit_comment_btn', function(){
             $.post("comment_op.php", {comment_id: comment_id, op: 'edit',
-                content: current_comment_item.find("textarea").val() })
+                content: current_comment_item.find("textarea").val(),token: "<?php echo $_SESSION['token'];?>" })
                 .done(function(data){
                     alert(data);
                     window.location.href="";
@@ -242,20 +251,31 @@ if (isset($_SESSION['userid'])) {
         });
     });
 
+    var clicks = 0;
     $('a[id*="check_all_replies_btn"]').click(function(){
-        var comment_id = get_comment_id($(this));
-        var current_comment_item = $(this).parents("div[id='comment_item']");
-        $.post("comment_op.php", {comment_id: comment_id, op:'get_replies'})
-            .done(function(data){
-                // console.log(data);
-                var jsonobj = jQuery.parseJSON(data);
-                // console.log(jsonobj);
-                jsonobj.forEach(function(reply_item){
-                    console.log(reply_item);
-                    current_comment_item.append('<div class="card"><div class="card-body"><h6 class="card-subtitle mb-2 text-muted">'+reply_item["username"]+'</h6><h6 class="card-subtitle mb-2 text-muted">'+reply_item["comment_date"]+'</h6><p class="card-text">'+ reply_item["content"] +'</p></div></div>');
-                });
+        if(clicks == 0){
+            var comment_id = get_comment_id($(this));
+            var current_comment_item = $(this).parents("div[id='comment_item']");
+            $.post("comment_op.php", {comment_id: comment_id, op:'get_replies',token: "<?php echo $_SESSION['token'];?>"})
+                .done(function(data){
+                    // console.log(data);
+                    var jsonobj = jQuery.parseJSON(data);
+                    // console.log(jsonobj);
+                    jsonobj.forEach(function(reply_item){
+                        console.log(reply_item);
+                        current_comment_item.append('<div class="card"><div class="card-body"><h6 class="card-subtitle mb-2 text-muted">'+reply_item["username"]+'</h6><h6 class="card-subtitle mb-2 text-muted">'+reply_item["comment_date"]+'</h6><p class="card-text">'+ reply_item["content"] +'</p></div></div>');
+                    });
 
-            });
+                });
+            clicks++;
+        }else{
+            var current_comment_item = $(this).parents("div[id='comment_item']");
+            // current_comment_item.find("#reply_comment_item").remove();
+            current_comment_item.find("div.card").remove();
+
+            clicks = 0;
+        }
+        console.log("click = " + clicks);
     });
 
     $(document).ready(function(){
@@ -263,7 +283,7 @@ if (isset($_SESSION['userid'])) {
             var comment_id = get_comment_id($(this));
             var userid = "<?php echo isset($_SESSION['userid']) ? $_SESSION['userid'] : -1; ?>";
             var image = $(this);
-            $.post("comment_op.php", {comment_id: comment_id, userid: userid, op:'check_record' })
+            $.post("comment_op.php", {comment_id: comment_id, userid: userid, op:'check_record',token: "<?php echo $_SESSION['token'];?>" })
                 .done(function(data){
                     var records_num = parseInt(data);
                     if(records_num == 1){
@@ -276,7 +296,7 @@ if (isset($_SESSION['userid'])) {
             var comment_id = get_comment_id($(this));
             var userid = "<?php echo isset($_SESSION['userid']) ? $_SESSION['userid'] : -1; ?>";
             var image = $(this);
-            $.post("comment_op.php", {comment_id: comment_id, userid: userid, op:'check_record' })
+            $.post("comment_op.php", {comment_id: comment_id, userid: userid, op:'check_record',token: "<?php echo $_SESSION['token'];?>" })
                 .done(function(data){
                     var records_num = parseInt(data);
                     if(records_num == 1){
@@ -292,7 +312,7 @@ if (isset($_SESSION['userid'])) {
             var current_comment_item = $(this).parents("div[id='comment_item']");
             var reply_num_label = current_comment_item.find("#reply_num");
             console.log(comment_id);
-            $.post("comment_op.php", {comment_id: comment_id, op: 'check_reply_num' })
+            $.post("comment_op.php", {comment_id: comment_id, op: 'check_reply_num',token: "<?php echo $_SESSION['token'];?>" })
                 .done(function(data){
                     console.log(data);
                     reply_num_label.text(data);

@@ -1,6 +1,9 @@
 <?php
 session_start();
 require 'database.php';
+if(!hash_equals($_SESSION['token'], $_POST['token'])){
+    die("Request forgery detected");
+}
 if(isset($_POST['story_id'])&&isset($_POST['story_title'])&&isset($_POST['story_content'])){
 	$is_edit = false;
 	$title = $_POST['story_title'];

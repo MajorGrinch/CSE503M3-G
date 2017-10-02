@@ -1,6 +1,9 @@
 <?php
 session_start();
 require 'database.php';
+if(!hash_equals($_SESSION['token'], $_POST['token'])){
+    die("Request forgery detected");
+}
 if (isset($_POST['comment_input']) && isset($_POST['story_id'])) {
     $comment_input = $_POST['comment_input'];
     $userid        = (int) $_SESSION['userid'];

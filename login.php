@@ -13,11 +13,13 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     $stmt->execute();
     $stmt->bind_result($userid, $temp_password);
     $stmt->fetch();
-    if ($temp_password === $password) {
+    if (password_verify($password, $temp_password)) {
         $_SESSION['user'] = $username;
         $_SESSION['userid'] = $userid;
+        $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(32));
     } else {
         die("password incorrect");
+        header("Location:index.php");
     }
     $stmt->close();
     header("Location: index.php");

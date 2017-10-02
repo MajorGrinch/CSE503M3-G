@@ -13,7 +13,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         printf("Query Prep Failed: %s\n", $mysqli->error);
         exit;
     }
-    $stmt->bind_param("ss", $username, $password);
+    $stmt->bind_param("ss", $username, password_hash($password, PASSWORD_BCRYPT));
     if ($stmt->execute()) {
         $exc = true;
     }
