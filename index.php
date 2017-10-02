@@ -138,7 +138,7 @@ $stmt->close();
         $("#man_my_stories").click(function(){
             var news_list = $("#news_list");
             $("#news_list").empty();
-            $.post("showmystory.php",{token: "<?php echo $_SESSION['token'];?>"})
+            $.post("showmystory.php",{token: "<?php echo isset($_SESSION['token'])?$_SESSION['token']: '';?>"})
                 .done(function(data){
                     // $("#news_list").append(data);
                     console.log(data);
