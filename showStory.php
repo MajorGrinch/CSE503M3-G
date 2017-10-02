@@ -149,7 +149,7 @@ if (isset($_SESSION['userid'])) {
     );
     $('a[id*="comment_delete"]').click(function(){
         var comment_id = get_comment_id($(this));
-        $.post("comment_op.php",{ comment_id: comment_id, op:'delete', token: "<?php echo $_SESSION['token'];?>"})
+        $.post("comment_op.php",{ comment_id: comment_id, op:'delete', token: "<?php echo isset($_SESSION['token'])?$_SESSION['token']: '';?>"})
             .done(function(data){
                 alert(data);
             });
@@ -165,7 +165,7 @@ if (isset($_SESSION['userid'])) {
             current_comment_item.append('<button class="btn btn-secondary" id="reply_comment_submit">reply</button>');
             current_comment_item.on('click', '#reply_comment_submit', function(){
                 $.post("comment_op.php",
-                    {comment_id: comment_id, op:'reply_comment', content: current_comment_item.find("textarea").val(), token: "<?php echo $_SESSION['token'];?>" })
+                    {comment_id: comment_id, op:'reply_comment', content: current_comment_item.find("textarea").val(), token: "<?php echo isset($_SESSION['token'])?$_SESSION['token']: '';?>" })
                     .done(function(data){
                         console.log(data);
                         if(data == -1){
@@ -199,7 +199,7 @@ if (isset($_SESSION['userid'])) {
         var comment_id = get_comment_id($(this));
         var current_comment_item = $(this).parents("div[id='comment_item']");
         var agree_num_label = current_comment_item.find("#agree_num");
-         $.post("comment_op.php", {comment_id: comment_id, op: 'agree',token: "<?php echo $_SESSION['token'];?>"})
+         $.post("comment_op.php", {comment_id: comment_id, op: 'agree',token: "<?php echo isset($_SESSION['token'])?$_SESSION['token']: '';?>"})
             .done(function(data){
                 // alert(agree_num_p);
                 if(data==-1){
@@ -224,7 +224,7 @@ if (isset($_SESSION['userid'])) {
         var comment_id = get_comment_id($(this));
         var current_comment_item = $(this).parents("div[id='comment_item']");
         var oppose_num_label = current_comment_item.find("#oppose_num");
-         $.post("comment_op.php", {comment_id: comment_id, op: 'oppose',token: "<?php echo $_SESSION['token'];?>"})
+         $.post("comment_op.php", {comment_id: comment_id, op: 'oppose',token: "<?php echo isset($_SESSION['token'])?$_SESSION['token']: '';?>"})
             .done(function(data){
                 if(data==-1){
                     return;
@@ -243,7 +243,7 @@ if (isset($_SESSION['userid'])) {
         current_comment_item.append('<button class="btn btn-secondary" id="edit_comment_btn">Submit</button>');
         current_comment_item.on('click', '#edit_comment_btn', function(){
             $.post("comment_op.php", {comment_id: comment_id, op: 'edit',
-                content: current_comment_item.find("textarea").val(),token: "<?php echo $_SESSION['token'];?>" })
+                content: current_comment_item.find("textarea").val(),token: "<?php echo isset($_SESSION['token'])?$_SESSION['token']: '';?>" })
                 .done(function(data){
                     alert(data);
                     window.location.href="";
@@ -256,7 +256,7 @@ if (isset($_SESSION['userid'])) {
         if(clicks == 0){
             var comment_id = get_comment_id($(this));
             var current_comment_item = $(this).parents("div[id='comment_item']");
-            $.post("comment_op.php", {comment_id: comment_id, op:'get_replies',token: "<?php echo $_SESSION['token'];?>"})
+            $.post("comment_op.php", {comment_id: comment_id, op:'get_replies',token: "<?php echo isset($_SESSION['token'])?$_SESSION['token']: '';?>"})
                 .done(function(data){
                     // console.log(data);
                     var jsonobj = jQuery.parseJSON(data);
@@ -283,7 +283,7 @@ if (isset($_SESSION['userid'])) {
             var comment_id = get_comment_id($(this));
             var userid = "<?php echo isset($_SESSION['userid']) ? $_SESSION['userid'] : -1; ?>";
             var image = $(this);
-            $.post("comment_op.php", {comment_id: comment_id, userid: userid, op:'check_record',token: "<?php echo $_SESSION['token'];?>" })
+            $.post("comment_op.php", {comment_id: comment_id, userid: userid, op:'check_record',token: "<?php echo isset($_SESSION['token'])?$_SESSION['token']: '';?>" })
                 .done(function(data){
                     var records_num = parseInt(data);
                     if(records_num == 1){
@@ -296,7 +296,7 @@ if (isset($_SESSION['userid'])) {
             var comment_id = get_comment_id($(this));
             var userid = "<?php echo isset($_SESSION['userid']) ? $_SESSION['userid'] : -1; ?>";
             var image = $(this);
-            $.post("comment_op.php", {comment_id: comment_id, userid: userid, op:'check_record',token: "<?php echo $_SESSION['token'];?>" })
+            $.post("comment_op.php", {comment_id: comment_id, userid: userid, op:'check_record',token: "<?php echo isset($_SESSION['token'])?$_SESSION['token']: '';?>" })
                 .done(function(data){
                     var records_num = parseInt(data);
                     if(records_num == 1){
@@ -312,7 +312,7 @@ if (isset($_SESSION['userid'])) {
             var current_comment_item = $(this).parents("div[id='comment_item']");
             var reply_num_label = current_comment_item.find("#reply_num");
             console.log(comment_id);
-            $.post("comment_op.php", {comment_id: comment_id, op: 'check_reply_num',token: "<?php echo $_SESSION['token'];?>" })
+            $.post("comment_op.php", {comment_id: comment_id, op: 'check_reply_num',token: "<?php echo isset($_SESSION['token'])?$_SESSION['token']: '';?>" })
                 .done(function(data){
                     console.log(data);
                     reply_num_label.text(data);
