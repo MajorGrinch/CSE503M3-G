@@ -23,7 +23,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         echo "<script language=\"JavaScript\">
         alert(\"Sign up failed!Please check the name to be unique!\");
         window.location.href=\"index.php\";
-        </script>"
+        </script>";
     }
     $stmt->close();
 }
