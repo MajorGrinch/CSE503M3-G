@@ -1,7 +1,7 @@
 create table users(
 	userid int not null auto_increment,
 	username varchar(25) not null,
-	password char(255) not null,
+	password varchar(255) not null,
 	primary key (userid)
 )engine = InnoDB default character set = utf8 collate = utf8_general_ci;
 
