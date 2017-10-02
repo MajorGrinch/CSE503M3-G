@@ -159,7 +159,7 @@ session_start();
         if(reply_btn_clicks == 0){
             var is_login = "<?php echo isset($_SESSION['userid']) ? $_SESSION['userid'] : -1; ?>";
             if( is_login == "-1" ){
-                alert("Please sign in to agree!");
+                alert("Please sign in to reply!");
                 return;
             }
             var comment_id = get_comment_id($(this));
