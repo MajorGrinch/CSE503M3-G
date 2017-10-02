@@ -39,10 +39,10 @@ session_start();
                 <div class="card-body">
                     <h1 class="card-title"><?php printf($title);?></h1>
                     <br/>
-                    <h6 class="card-subtitle mb-2 text-muted" id="author">Author: <?php printf($username);?></h6>
-                    <h6 class="card-subtitle mb-2 text-muted" id="issue_date">Issue date: <?php printf($issue_date);?></h6>
+                    <h6 class="card-subtitle mb-2 text-muted" id="author">Author: <?php printf(htmlspecialchars($username));?></h6>
+                    <h6 class="card-subtitle mb-2 text-muted" id="issue_date">Issue date: <?php printf(htmlspecialchars($issue_date));?></h6>
                     <br/><br/>
-                    <p class="card-text"><?php print(htmlspecialchars($content));?></p>
+                    <p class="card-text"><?php printf(htmlspecialchars($content));?></p>
                     <div align="center">
                         <a href="index.php" class="card-link"><b>Home</b></a>
                         <?php

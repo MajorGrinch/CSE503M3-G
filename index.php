@@ -48,39 +48,39 @@ session_start();
                 </div>
             <?php endif;?>
             <?php
-if (isset($_GET['logout'])) {
-    unset($_SESSION['user']);
-    unset($_SESSION['userid']);
-    unset($_SESSION['token']);
-    session_destroy();
-    header("Location:index.php");
-}
-?>
+            if (isset($_GET['logout'])) {
+                unset($_SESSION['user']);
+                unset($_SESSION['userid']);
+                unset($_SESSION['token']);
+                session_destroy();
+                header("Location:index.php");
+            }
+            ?>
         </div>
         <div id="news_list">
         <?php
-require 'database.php';
-$stmt = $mysqli->prepare("select story_id, title, issue_date, username, left(content,200) as depiction from stories join users on stories.userid=users.userid order by issue_date desc");
+        require 'database.php';
+        $stmt = $mysqli->prepare("select story_id, title, issue_date, username, left(content,200) as depiction from stories join users on stories.userid=users.userid order by issue_date desc");
 
-if (!$stmt) {
-    printf("Query Prep Failed: %s\n", $mysqli->error);
-    exit;
-}
-$stmt->execute();
-$result = $stmt->get_result();
-while ($row = $result->fetch_assoc()) {?>
-                        <div class="card">
-                        <div class="card-body">
-                            <a href="showStory.php?id=<?php echo $row['story_id']; ?>"><h4 class="card-title"><?php echo $row["title"] ?></h4></a>
-                            <h6 class="card-subtitle mb-2 text-muted"><?php echo $row["username"] ?></h6>
-                            <h6 class="card-subtitle mb-2 text-muted"><?php echo $row["issue_date"] ?></h6>
-                            <p><?php echo $row["depiction"] . "..." ?></p>
-                        </div>
-                      </div>
-                    <?php
-}
-$stmt->close();
-?>
+        if (!$stmt) {
+            printf("Query Prep Failed: %s\n", $mysqli->error);
+            exit;
+        }
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {?>
+                                <div class="card">
+                                <div class="card-body">
+                                    <a href="showStory.php?id=<?php echo $row['story_id']; ?>"><h4 class="card-title"><?php echo htmlspecialchars($row["title"]); ?></h4></a>
+                                    <h6 class="card-subtitle mb-2 text-muted"><?php echo htmlspecialchars($row["username"]); ?></h6>
+                                    <h6 class="card-subtitle mb-2 text-muted"><?php echo htmlspecialchars($row["issue_date"]); ?></h6>
+                                    <p><?php echo htmlspecialchars($row["depiction"]) . "..." ?></p>
+                                </div>
+                              </div>
+                            <?php
+        }
+        $stmt->close();
+        ?>
 
         </div>
     </div>

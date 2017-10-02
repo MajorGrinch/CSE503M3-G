@@ -41,11 +41,11 @@ if (isset($_GET['story_id'])) {
             <input type="hidden" name="token" value="<?php echo $_SESSION['token'];?>" />
             <div class="form-group">
                 <label for="story_title">Title</label>
-                <input type="text" name="story_title" class="form-control" id="story_title" value="<?php echo $title; ?>">
+                <input type="text" name="story_title" class="form-control" id="story_title" value="<?php echo htmlspecialchars($title); ?>">
             </div>
             <div class="form-group">
                 <label for="story_content">Content</label>
-                <textarea class="form-control" name="story_content" id="story_content" rows="30"><?php echo $content; ?></textarea>
+                <textarea class="form-control" name="story_content" id="story_content" rows="30"><?php echo htmlspecialchars($content); ?></textarea>
             </div>
             <input type="number" name="story_id" id="story_id" value="<?php echo $id ?>">
             <button type="submit" class="btn btn-primary">Confirm Edit</button>

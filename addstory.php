@@ -25,6 +25,9 @@ if (isset($_POST['story_title']) && isset($_POST['story_content'])) {
     if ($is_publish) {
         header("Location: index.php");
     } else {
-        die("Publish failed");
+        echo "<script language=\"JavaScript\">
+        alert(\"Publish failed!\");
+        window.location.href=\"index.php\";
+        </script>";
     }
 }

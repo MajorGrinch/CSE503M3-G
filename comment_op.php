@@ -157,7 +157,7 @@ if (isset($_POST['comment_id']) && isset($_POST['op'])) {
     }
 
     if ($op === 'check_record') {
-        csrf_check();
+        // csrf_check();
         $userid = (int) $_POST['userid'];
         $stmt   = $mysqli->prepare("select count(*) from agreetb where comment_id=? and userid=?");
         if (!$stmt) {
