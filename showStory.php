@@ -18,24 +18,23 @@ session_start();
     <div id="container">
         <div id="story">
             <?php
-require 'database.php';
-if (isset($_GET['id'])) {
-    $id   = (int) $_GET['id'];
-    $stmt = $mysqli->prepare("select stories.userid as uid, title, issue_date, username, content
-                    from stories join users on stories.userid=users.userid
-                    where story_id=?");
-    if (!$stmt) {
-        printf("Query Prep Failed: %s\n", $mysqli->error);
-        exit;
-    }
-    $stmt->bind_param('i', $id);
-    $stmt->execute();
-    $stmt->bind_result($userid, $title, $issue_date, $username, $content);
-    $stmt->fetch();
-    $stmt->close();
-    // print(htmlspecialchars($content));
-}
-?>
+            require 'database.php';
+            if (isset($_GET['id'])) {
+                $id   = (int) $_GET['id'];
+                $stmt = $mysqli->prepare("select stories.userid as uid, title, issue_date, username, content
+                                from stories join users on stories.userid=users.userid
+                                where story_id=?");
+                if (!$stmt) {
+                    printf("Query Prep Failed: %s\n", $mysqli->error);
+                    exit;
+                }
+                $stmt->bind_param('i', $id);
+                $stmt->execute();
+                $stmt->bind_result($userid, $title, $issue_date, $username, $content);
+                $stmt->fetch();
+                $stmt->close();
+            }
+            ?>
             <div class="card">
                 <div class="card-body">
                     <h1 class="card-title"><?php printf($title);?></h1>
@@ -47,14 +46,14 @@ if (isset($_GET['id'])) {
                     <div align="center">
                         <a href="index.php" class="card-link"><b>Home</b></a>
                         <?php
-if (isset($_SESSION['userid'])) {
-    if ($userid === $_SESSION['userid']) {?>
-                            <a href="editstory.php?story_id=<?php echo $id; ?>" class="card-link">Edit</a>
-                            <a href="deletestory.php?story_id=<?php echo $id; ?>" class="card-link">Delete</a>
-                        <?php
-}
-}
-?>
+                        if (isset($_SESSION['userid'])) {
+                            if ($userid === $_SESSION['userid']) {?>
+                                <a href="editstory.php?story_id=<?php echo $id; ?>" class="card-link">Edit</a>
+                                <a href="deletestory.php?story_id=<?php echo $id; ?>" class="card-link">Delete</a>
+                            <?php
+                            }
+                        }
+                        ?>
                     </div>
                 </div>
             </div>
@@ -76,35 +75,35 @@ if (isset($_SESSION['userid'])) {
             </div>
             <div id="comment_body">
                 <?php
-$stmt = $mysqli->prepare("select comment_id, username, content, agree, oppose, comments.userid from comments join users on comments.userid=users.userid where story_id=?");
-if (!$stmt) {
-    printf("Query Prep Failed: %s\n", $mysqli->error);
-    exit;
-}
-$stmt->bind_param('i', $id);
-$stmt->execute();
-$stmt->bind_result($comment_id, $username, $content, $agree, $oppose, $comment_uid);
-while ($stmt->fetch()) {
-    ?>
-                    <div class="card" id="comment_item" val="<?php echo $comment_id ?>">
-                        <div class="card-body">
+                $stmt = $mysqli->prepare("select comment_id, username, content, agree, oppose, comments.userid from comments join users on comments.userid=users.userid where story_id=?");
+                if (!$stmt) {
+                    printf("Query Prep Failed: %s\n", $mysqli->error);
+                    exit;
+                }
+                $stmt->bind_param('i', $id);
+                $stmt->execute();
+                $stmt->bind_result($comment_id, $username, $content, $agree, $oppose, $comment_uid);
+                while ($stmt->fetch()) {
+                ?>
+                <div class="card" id="comment_item" val="<?php echo $comment_id ?>">
+                    <div class="card-body">
                         <h5 class="card-title"><?php printf(htmlspecialchars($username));?></h5>
                         <?php
-if (isset($_SESSION['userid'])) {
-        if (($userid === $_SESSION['userid']) || ($comment_uid === $_SESSION['userid'])) {?>
-                            <a href="" class="card-link" id="comment_delete">Delete</a>
+                        if (isset($_SESSION['userid'])) {
+                            if (($userid === $_SESSION['userid']) || ($comment_uid === $_SESSION['userid'])) {?>
+                                <a href="" class="card-link" id="comment_delete">Delete</a>
+                            <?php
+                            }
+                        }
+                        ?>
                         <?php
-}
-    }
-    ?>
+                        if (isset($_SESSION['userid'])) {
+                            if ($comment_uid === $_SESSION['userid']) {?>
+                                <a href="#/" class="card-link" id="comment_edit">Edit</a>
                         <?php
-if (isset($_SESSION['userid'])) {
-        if ($comment_uid === $_SESSION['userid']) {?>
-                            <a href="#/" class="card-link" id="comment_edit">Edit</a>
-                        <?php
-}
-    }
-    ?>
+                            }
+                        }
+                        ?>
                         <p class="card-text" id="comment_content"><?php printf(htmlspecialchars($content));?></p>
                         <img src="image/agree.png" val="0" alt="agree" id="agree_btn" width="20px" height="20px"/>
                         <label id="agree_num" for="agree_btn"><?php printf(htmlspecialchars($agree));?></label>
@@ -116,8 +115,8 @@ if (isset($_SESSION['userid'])) {
                         </div>
                     </div>
                 <?php
-}
-?>
+                }
+                ?>
             </div>
         </div>
     </div>
@@ -158,6 +157,11 @@ if (isset($_SESSION['userid'])) {
     var reply_btn_clicks = 0;
     $('a[id*="reply_comment_btn"]').click(function(){
         if(reply_btn_clicks == 0){
+            var is_login = "<?php echo isset($_SESSION['userid']) ? $_SESSION['userid'] : -1; ?>";
+            if( is_login == "-1" ){
+                alert("Please sign in to agree!");
+                return;
+            }
             var comment_id = get_comment_id($(this));
             var current_comment_item = $(this).parents("div[id='comment_item']");
             var reply_num_label = current_comment_item.find("#reply_num");
