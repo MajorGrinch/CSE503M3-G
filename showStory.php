@@ -139,11 +139,11 @@ session_start();
     }
 
     $('div[id*="comment_item"]').hover(function(){
-        $(this).find("a").css("visibility", "visible");
-        $(this).find("#reply_num").css("visibility", "visible");
+        $(this).find("a.card-link").css("visibility", "visible");
+        // $(this).find("#reply_num").css("visibility", "visible");
         },function(){
-        $(this).find("a").css("visibility", "hidden");
-        $(this).find("#reply_num").css("visibility", "hidden");
+        $(this).find("a.card-link").css("visibility", "hidden");
+        // $(this).find("#reply_num").css("visibility", "hidden");
         }
     );
     $('a[id*="comment_delete"]').click(function(){
