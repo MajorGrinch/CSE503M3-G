@@ -258,6 +258,11 @@ session_start();
     var clicks = 0;
     $('a[id*="check_all_replies_btn"]').click(function(){
         if(clicks == 0){
+            var is_login = "<?php echo isset($_SESSION['userid']) ? $_SESSION['userid'] : -1; ?>";
+            if( is_login == "-1" ){
+                alert("Please sign in to see all replies!");
+                return;
+            }
             var comment_id = get_comment_id($(this));
             var current_comment_item = $(this).parents("div[id='comment_item']");
             $.post("comment_op.php", {comment_id: comment_id, op:'get_replies'})
