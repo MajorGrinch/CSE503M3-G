@@ -43,7 +43,7 @@ session_start();
                     <h6 class="card-subtitle mb-2 text-muted" id="issue_date">Issue date: <?php print(htmlspecialchars($issue_date));?></h6>
                     <br/><br/>
                     <p class="card-text"><?php print(htmlspecialchars($content));?></p>
-                    <div align="center">
+                    <div id="story_op">
                         <a href="index.php" class="card-link"><b>Home</b></a>
                         <?php
                         if (isset($_SESSION['userid'])) {
@@ -68,7 +68,7 @@ session_start();
                     <input type="hidden" name="token" value="<?php echo $_SESSION['token'];?>" />
                     <div class="form-group">
                         <textarea class="form-control" name="comment_input" rows="5"></textarea>
-                        <input name="story_id" value="<?php echo $id; ?>" id="storyid_input" />
+                        <input name="story_id" value="<?php echo isset($id)?$id:-1; ?>" id="storyid_input" />
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
