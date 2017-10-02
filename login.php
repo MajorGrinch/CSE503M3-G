@@ -18,8 +18,8 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         $_SESSION['userid'] = $userid;
         $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(32));
     } else {
-        die("password incorrect");
-        header("Location:index.php");
+        print("password incorrect");
+        sleep(2);
     }
     $stmt->close();
     header("Location: index.php");
