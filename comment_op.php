@@ -35,7 +35,7 @@ if (isset($_POST['comment_input']) && isset($_POST['story_id'])) {
 }
 
 if (isset($_POST['comment_id']) && isset($_POST['op'])) {
-    // $delete_comment = false;
+    csrf_check();
     $comment_id = (int) $_POST['comment_id'];
     $op         = $_POST['op'];
     if ($op === 'delete') {

@@ -49,7 +49,7 @@ session_start();
                         if (isset($_SESSION['userid'])) {
                             if ($userid === $_SESSION['userid']) {?>
                                 <a href="editstory.php?story_id=<?php echo $id; ?>" class="card-link">Edit</a>
-                                <a href="deletestory.php?story_id=<?php echo $id; ?>" class="card-link">Delete</a>
+                                <a href="#/" id="delete_story_btn" class="card-link">Delete</a>
                             <?php
                             }
                         }
@@ -137,6 +137,14 @@ session_start();
         var comment_id = current_comment_item.attr('val');
         return comment_id;
     }
+
+    $('#delete_story_btn').click(function(){
+        $.post("deletestory.php", {story_id: "<?php echo isset($id)?$id:-1 ?>", token: "<?php echo isset($_SESSION['token'])?$_SESSION['token']:'' ?>"})
+            .done(function(data){
+                alert(data);
+                window.location.href="index.php";
+            });
+    });
 
     $('div[id*="comment_item"]').hover(function(){
         $(this).find("a.card-link").css("visibility", "visible");
