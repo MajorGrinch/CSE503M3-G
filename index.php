@@ -94,8 +94,8 @@ session_start();
                 <div class="modal-body">
                     <form name="reg-form" id="signup_form" action="register.php" method="post">
                         <div class="form-group">
-                            <label for="username" class="control-label">Username:</label>
-                            <input type="text" class="form-control" name="username" id="username"/>
+                            <label for="new_username" class="control-label">Username:</label>
+                            <input type="text" class="form-control" name="username" id="new_username"/>
                         </div>
                         <div class="form-group">
                             <label for="password" class="control-label">Password</label>
