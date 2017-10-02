@@ -1,10 +1,15 @@
 <?php
 session_start();
 require 'database.php';
-if(!hash_equals($_SESSION['token'], $_POST['token'])){
-    die("Request forgery detected");
+function csrf_check()
+{
+    if (!hash_equals($_SESSION['token'], $_POST['token'])) {
+        die("Request forgery detected");
+    }
 }
+
 if (isset($_POST['comment_input']) && isset($_POST['story_id'])) {
+    csrf_check();
     $comment_input = $_POST['comment_input'];
     $userid        = (int) $_SESSION['userid'];
     $story_id      = (int) $_POST['story_id'];
@@ -26,6 +31,7 @@ if (isset($_POST['comment_id']) && isset($_POST['op'])) {
     $comment_id = (int) $_POST['comment_id'];
     $op         = $_POST['op'];
     if ($op === 'delete') {
+        csrf_check();
         $stmt = $mysqli->prepare("delete from comments where comment_id=?");
         if (!$stmt) {
             printf("Query Prep Failed: %s\n", $mysqli->error);
@@ -39,6 +45,7 @@ if (isset($_POST['comment_id']) && isset($_POST['op'])) {
         }
     }
     if ($op === 'edit') {
+        csrf_check();
         $stmt    = $mysqli->prepare("update comments set content=? where comment_id=?");
         $content = $_POST['content'];
         if (!$stmt) {
@@ -53,7 +60,7 @@ if (isset($_POST['comment_id']) && isset($_POST['op'])) {
         }
     }
     if ($op === 'agree') {
-
+        csrf_check();
         $userid = $_SESSION['userid'];
 
         $check_dup = $mysqli->prepare("select count(*) from agreetb where comment_id=? and userid=?");
@@ -103,7 +110,7 @@ if (isset($_POST['comment_id']) && isset($_POST['op'])) {
     if ($op === 'oppose') {
 
         $userid = $_SESSION['userid'];
-
+        csrf_check();
         $check_dup = $mysqli->prepare("select count(*) from agreetb where comment_id=? and userid=?");
         if (!$check_dup) {
             printf("Query prep failed: %s", $mysqli->error);
@@ -150,6 +157,7 @@ if (isset($_POST['comment_id']) && isset($_POST['op'])) {
     }
 
     if ($op === 'check_record') {
+        csrf_check();
         $userid = (int) $_POST['userid'];
         $stmt   = $mysqli->prepare("select count(*) from agreetb where comment_id=? and userid=?");
         if (!$stmt) {
@@ -163,6 +171,7 @@ if (isset($_POST['comment_id']) && isset($_POST['op'])) {
     }
 
     if ($op === 'reply_comment') {
+        csrf_check();
         if (!isset($_SESSION['userid'])) {
             print(-1);
             exit;
@@ -201,7 +210,8 @@ if (isset($_POST['comment_id']) && isset($_POST['op'])) {
         print($record_num);
     }
 
-    if($op === 'get_replies'){
+    if ($op === 'get_replies') {
+        csrf_check();
         $stmt = $mysqli->prepare("select username, content, comment_date from comments join users on comments.userid=users.userid where link_comment=?");
         if (!$stmt) {
             printf("Query Prep Failed: %s\n", $mysqli->error);
@@ -209,8 +219,8 @@ if (isset($_POST['comment_id']) && isset($_POST['op'])) {
         $stmt->bind_param("i", $comment_id);
         $stmt->execute();
         $result_array = array();
-        $result = $stmt->get_result();
-        while( $row = $result->fetch_assoc()){
+        $result       = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
             array_push($result_array, $row);
         }
         print(json_encode($result_array));

@@ -256,7 +256,7 @@ if (isset($_SESSION['userid'])) {
         if(clicks == 0){
             var comment_id = get_comment_id($(this));
             var current_comment_item = $(this).parents("div[id='comment_item']");
-            $.post("comment_op.php", {comment_id: comment_id, op:'get_replies',token: "<?php echo isset($_SESSION['token'])?$_SESSION['token']: '';?>"})
+            $.post("comment_op.php", {comment_id: comment_id, op:'get_replies'})
                 .done(function(data){
                     // console.log(data);
                     var jsonobj = jQuery.parseJSON(data);
