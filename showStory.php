@@ -265,13 +265,13 @@ session_start();
             }
             var comment_id = get_comment_id($(this));
             var current_comment_item = $(this).parents("div[id='comment_item']");
-            $.post("comment_op.php", {comment_id: comment_id, op:'get_replies'})
+            $.post("comment_op.php", {comment_id: comment_id, op:'get_replies', token: "<?php echo isset($_SESSION['token'])?$_SESSION['token']: ''; ?>"})
                 .done(function(data){
                     // console.log(data);
                     var jsonobj = jQuery.parseJSON(data);
                     // console.log(jsonobj);
                     jsonobj.forEach(function(reply_item){
-                        console.log(reply_item);
+                        // console.log(reply_item);
                         current_comment_item.append('<div class="card"><div class="card-body"><h6 class="card-subtitle mb-2 text-muted">'+reply_item["username"]+'</h6><h6 class="card-subtitle mb-2 text-muted">'+reply_item["comment_date"]+'</h6><p class="card-text">'+ reply_item["content"] +'</p></div></div>');
                     });
 
