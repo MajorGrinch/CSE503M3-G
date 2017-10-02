@@ -69,15 +69,15 @@ session_start();
         $stmt->execute();
         $result = $stmt->get_result();
         while ($row = $result->fetch_assoc()) {?>
-                                <div class="card">
-                                <div class="card-body">
-                                    <a href="showStory.php?id=<?php echo $row['story_id']; ?>"><h4 class="card-title"><?php echo htmlspecialchars($row["title"]); ?></h4></a>
-                                    <h6 class="card-subtitle mb-2 text-muted"><?php echo htmlspecialchars($row["username"]); ?></h6>
-                                    <h6 class="card-subtitle mb-2 text-muted"><?php echo htmlspecialchars($row["issue_date"]); ?></h6>
-                                    <p><?php echo htmlspecialchars($row["depiction"]) . "..." ?></p>
-                                </div>
-                              </div>
-                            <?php
+            <div class="card">
+                <div class="card-body">
+                    <a href="showStory.php?id=<?php echo $row['story_id']; ?>"><h4 class="card-title"><?php echo htmlspecialchars($row["title"]); ?></h4></a>
+                    <h6 class="card-subtitle mb-2 text-muted"><?php echo htmlspecialchars($row["username"]); ?></h6>
+                    <h6 class="card-subtitle mb-2 text-muted"><?php echo htmlspecialchars($row["issue_date"]); ?></h6>
+                    <p><?php echo htmlspecialchars($row["depiction"]) . "..." ?></p>
+                </div>
+            </div>
+        <?php
         }
         $stmt->close();
         ?>
