@@ -1,6 +1,7 @@
 <?php
 session_start();
 require 'database.php';
+require 'fieocheck.php';
 if(!hash_equals($_SESSION['token'], $_POST['token'])){
     die("Request forgery detected");
 }
@@ -8,6 +9,13 @@ if(isset($_POST['story_id'])&&isset($_POST['story_title'])&&isset($_POST['story_
 	$is_edit = false;
 	$title = $_POST['story_title'];
     $content = $_POST['story_content'];
+    if(!content_check($content) || !content_check($title)){
+        echo "<script language=\"JavaScript\">
+            alert(\"Comment failed! Check the input!\");
+            window.history.go(-1);
+            </script>";
+        exit;
+    }
     $story_id = (int)$_POST['story_id'];
     $stmt = $mysqli->prepare("update stories set title=?, content=? where story_id=?");
     if (!$stmt) {

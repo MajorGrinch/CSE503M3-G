@@ -39,10 +39,10 @@ session_start();
                 <div class="card-body">
                     <h1 class="card-title"><?php printf($title);?></h1>
                     <br/>
-                    <h6 class="card-subtitle mb-2 text-muted" id="author">Author: <?php printf(htmlspecialchars($username));?></h6>
-                    <h6 class="card-subtitle mb-2 text-muted" id="issue_date">Issue date: <?php printf(htmlspecialchars($issue_date));?></h6>
+                    <h6 class="card-subtitle mb-2 text-muted" id="author">Author: <?php print(htmlspecialchars($username));?></h6>
+                    <h6 class="card-subtitle mb-2 text-muted" id="issue_date">Issue date: <?php print(htmlspecialchars($issue_date));?></h6>
                     <br/><br/>
-                    <p class="card-text"><?php printf(htmlspecialchars($content));?></p>
+                    <p class="card-text"><?php print(htmlspecialchars($content));?></p>
                     <div align="center">
                         <a href="index.php" class="card-link"><b>Home</b></a>
                         <?php
@@ -87,7 +87,7 @@ session_start();
                 ?>
                 <div class="card" id="comment_item" val="<?php echo $comment_id ?>">
                     <div class="card-body">
-                        <h5 class="card-title"><?php printf(htmlspecialchars($username));?></h5>
+                        <h5 class="card-title"><?php print(htmlspecialchars($username));?></h5>
                         <?php
                         if (isset($_SESSION['userid'])) {
                             if (($userid === $_SESSION['userid']) || ($comment_uid === $_SESSION['userid'])) {?>
@@ -104,11 +104,11 @@ session_start();
                             }
                         }
                         ?>
-                        <p class="card-text" id="comment_content"><?php printf(htmlspecialchars($content));?></p>
+                        <p class="card-text" id="comment_content"><?php print(htmlspecialchars($content));?></p>
                         <img src="image/agree.png" val="0" alt="agree" id="agree_btn" width="20px" height="20px"/>
                         <label id="agree_num" for="agree_btn"><?php printf(htmlspecialchars($agree));?></label>
                         <img src="image/oppose.png" val="0" alt="oppose" id="oppose_btn" width="20px" height="20px"/>
-                        <label id="oppose_num" for="oppose_btn"><?php printf(htmlspecialchars($oppose));?></label>
+                        <label id="oppose_num" for="oppose_btn"><?php print(htmlspecialchars($oppose));?></label>
                         <a href="javascript:void(0);" id="reply_comment_btn">Reply</a>
                         <a href="javascript:void(0)" id="check_all_replies_btn">All Replies</a>
                         <label for="check_all_replies_btn" id="reply_num"></label>

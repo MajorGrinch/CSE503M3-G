@@ -1,6 +1,7 @@
 <?php
 session_start();
 require 'database.php';
+require 'fieocheck.php';
 function csrf_check()
 {
     if (!hash_equals($_SESSION['token'], $_POST['token'])) {
@@ -11,6 +12,13 @@ function csrf_check()
 if (isset($_POST['comment_input']) && isset($_POST['story_id'])) {
     csrf_check();
     $comment_input = $_POST['comment_input'];
+    if(!content_check($comment_input)){
+        echo "<script language=\"JavaScript\">
+            alert(\"Comment failed! Check the input!\");
+            window.history.go(-1);
+            </script>";
+        exit;
+    }
     $userid        = (int) $_SESSION['userid'];
     $story_id      = (int) $_POST['story_id'];
     $stmt          = $mysqli->prepare("insert into comments
@@ -177,6 +185,10 @@ if (isset($_POST['comment_id']) && isset($_POST['op'])) {
             exit;
         }
         $content = $_POST['content'];
+        if(!content_check($content)){
+            die("invalid input");
+            exit;
+    }
         $userid  = $_SESSION['userid'];
         $stmt    = $mysqli->prepare("insert into comments (content, userid, type, link_comment)
                                     values (?,?, 1, ?)");
